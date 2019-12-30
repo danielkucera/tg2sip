@@ -3,10 +3,14 @@ project(tg2sip)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Build directory output
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY build)
+
 add_subdirectory(libtgvoip)
 
 find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
+#find_package(Td 1.5.0 REQUIRED)
 find_package(Td 1.2.0 REQUIRED)
 find_package(spdlog 0.17 REQUIRED)
 pkg_check_modules(PJSIP libpjproject>=2.8 REQUIRED)

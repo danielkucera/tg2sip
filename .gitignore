@@ -1,0 +1,9 @@
+build
+test
+.vscode
+
+# 
+docker/tg2sip/data
+!docker/tg2sip/data/.gitkeep
+docker/tg2sip/etc
+!docker/tg2sip/etc/.gitkeep

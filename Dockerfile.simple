@@ -1,0 +1,19 @@
+FROM debian:buster-slim
+
+RUN apt-get update \
+    && apt install libopus0 libssl1.1 -y \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY build/settings.ini /etc/tg2sip/settings.ini
+COPY build/tg2sip /usr/local/bin/tg2sip
+COPY build/gen_db /usr/local/bin/gen_db
+
+# Enviroments
+# YES / NO
+# when this is enabled volumes will be used.
+ENV TG2SIP_STANDARD_FOLDER YES
+
+VOLUME /etc/tg2sip
+VOLUME /var/tg2sip
+
+CMD [ "tg2sip" ]

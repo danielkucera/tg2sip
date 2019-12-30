@@ -1,8 +1,6 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/4dnph34apvfy6vft?svg=true)](https://ci.appveyor.com/project/Infactum/tg2sip)
+# TG2SIP Gateway
 
-# TG2SIP
-
-TG2SIP is a Telegram<->SIP voice gateway. It can be used to forward incoming telegram calls to your SIP PBX or make SIP->Telegram calls.
+TG2SIP is a `Telegram <-> SIP` voice gateway. It can be used to forward incoming telegram calls to your SIP PBX or vice versa.
 
 ## Requirements
 
@@ -11,37 +9,84 @@ Your SIP PBX should be comaptible with `L16@48000` or `OPUS@48000` voice codec.
 ## Usage
 
 1. Obtain binaries in one of convenient ways for you.
-   *  Build them from source.  
-      Requires C++17 supported comiler, which may be a trouble for old linux distros.
-   *  Download prebuild native binaries for one of supported distros.  
-      [Ubuntu 18.04 Bionic](https://ci.appveyor.com/api/projects/Infactum/tg2sip/artifacts/tg2sip_bionic.zip?branch=master&job=Environment%3A%20target_name%3DUbuntu%20Bionic%2C%20docker_tag%3Dbionic)  
-      [CentOS 7](https://ci.appveyor.com/api/projects/Infactum/tg2sip/artifacts/tg2sip_centos7.zip?branch=master&job=Environment%3A%20target_name%3DCentOS%207%2C%20docker_tag%3Dcentos7)  
-      Prebuild binaries requires OPUS libraries (`libopus0` for Ubuntu, `opus` for CentOS, etc).
-   *  [Download](https://ci.appveyor.com/api/projects/Infactum/tg2sip/artifacts/tg2sip.zip?branch=master&job=Environment%3A%20target_name%3DAppImage%2C%20docker_tag%3Dcentos6) universal AppImage package.  
-      More information of what is AppImage can be found here https://appimage.org/
-      
 2. Obtain `api_id` and `api_hash` tokens from [this](https://my.telegram.org) page and put them in `settings.ini` file.
 3. Login into telegram with `gen_db` app
 4. Set SIP server settings in `settings.ini`
 5. Run `tg2sip`
 
-SIP->Telegram calls can be done using 3 extension types:
+`SIP -> Telegram` calls can be done using 3 extension types:
 
 1. `tg#[\s\d]+` for calls by username
 2. `\+[\d]+` for calls by phone number
 3. `[\d]+` for calls by telegram ID. Only known IDs allowed by telegram API.
 
-All Telegram->SIP calls will be redirected to `callback_uri` SIP-URI that can be set in from `settings.ini` file.  
-Extra information about caller Telegram account will be added into `X-TG-*` SIP tags.
+All `Telegram -> SIP` calls will be redirected to `callback_uri` SIP-URI that can be set in from `settings.ini` file. 
+Extra information about Telegram account caller will be added into SIP headers:
+
+* `X-TG-Context`: Special header for debug purpose
+* `X-TG-ID`: Telegram User Id
+* `X-TG-FistName`: Optional, User first name
+* `X-TG-LastName`: Optional, User last name
+* `X-TG-Username`: Optional, User username
+* `X-TG-Phone`: Optional, User phone number
+
+
+## Build binaries
+
+```bash
+git clone https://github.com/hectorvent/tg2sip
+cd tg2sip
+
+./build.sh
+
+# build directory will be create and gen_db, tg2sip and settings.ini will exist
+```
+
+# Running on:
+
+## Running on debian
+
+```bash
+# Install dependencies.
+apt install libopus0 libssl1.1 -y
+
+# Create directory structure
+mkdir /etc/tg2sip
+mkdir /var/tg2sip
+
+cp build/{tg2sip,gen_db} /usr/local/bin
+
+# nano/vi /etc/tg2sip/settings.ini and change necessary values.
+cp settings.ini /etc/tg2sip/
+
+# Copy systemd service
+cp tg2sip.service /etc/systemd/system
+systemctl daemon-reload
+
+# create Telegram database and fill the requested information
+sudo TG2SIP_STANDARD_FOLDER=YES gen_db
+
+# start the tg2sip gateway and enjoy it.
+systemctl start tg2sip.service
+```
+
+## Running on docker
+
+```bash
+cd docker
+cp ../settings.ini tg2sip/etc
+docker run --rm -it -v `pwd`/tg2sip/etc:/etc/tg2sip/ -v `pwd`/tg2sip/data:/var/tg2sip/ -e TG2SIP_STANDARD_FOLDER=YES hectorvent/tg2sip-gateway gen_db
+
+# Edit settings file
+docker-compose up -d
+```
+
+## Todo:
+
+- Update to new version of `Tdlib`
+- Integration example using `Asterisk`, `FreeSwitch` and `Kamailio`.
+- A better db inicialization process. Is posible to create a API.
 
 ## Donate
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=755FZWPRC9YGL&lc=US&item_name=TG2SIP&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
-
-[Yandex.Money](https://yasobe.ru/na/tg2sip)
-
-**BTC** 39wNzvtcyRrTKmq5DjcUfGTixnGVSf8qLg  
-**BCH** qqgwg0g96sayht4lzxc89ky7mkdxfyj7jcl5m8qfps  
-**ETH** 0x72B8cb476b2c85b1170Ae2cdFB243B17680290b4  
-**ETC** 0x9C7d6CD9F9E0584e65f8aD20e1d2Ced947a55207  
-**LTC** MFyBRJTnHqXharzH7D3FYeEhAJuywMRfMd  
+As this repo is based on [Infactum/tg2sip](https://github.com/Infactum/tg2sip) make donation to Infactum.

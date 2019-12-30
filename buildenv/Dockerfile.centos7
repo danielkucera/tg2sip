@@ -1,4 +1,4 @@
-FROM centos:7 as builder
+FROM centos:7
 
 # https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7/
 RUN yum -y install centos-release-scl yum-utils \
@@ -14,15 +14,10 @@ RUN yum install -y \
 RUN wget https://cmake.org/files/v3.9/cmake-3.9.6-Linux-x86_64.sh \
     && sh cmake-3.9.6-Linux-x86_64.sh --prefix=/usr --exclude-subdir
 
-COPY tdlib_header.patch /
-COPY tdlib_threadname.patch /
-
 RUN source /opt/rh/devtoolset-7/enable \
     && git clone https://github.com/tdlib/td.git \
     && cd td \
     && git reset --hard v1.2.0 \
-    && git apply /tdlib_header.patch \
-    && git apply /tdlib_threadname.patch \
     && mkdir build \
     && cd build \
     && cmake -DCMAKE_BUILD_TYPE=Release .. \

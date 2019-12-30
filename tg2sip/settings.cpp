@@ -19,7 +19,7 @@
 #include <thread>
 #include "settings.h"
 
-Settings::Settings(INIReader &reader) {
+Settings::Settings(INIReader &reader, bool standard_folder_) {
 
     if (reader.ParseError() < 0) {
         std::cerr << "Can't load settings file!\n";
@@ -48,8 +48,16 @@ Settings::Settings(INIReader &reader) {
     //telegram
     api_id_ = static_cast<int>(reader.GetInteger("telegram", "api_id", 0));
     api_hash_ = reader.Get("telegram", "api_hash", "");
-    db_folder_ = reader.Get("telegram", "database_folder", "");
-    system_language_code_ = reader.Get("telegram", "database_folder", "en-US");
+
+    is_standard_folder_ = standard_folder_;
+
+    if (standard_folder_ == true) {
+        db_folder_ = "/var/tg2sip/";
+    } else {
+        db_folder_ = reader.Get("telegram", "database_folder", "");
+    }
+    
+    system_language_code_ = reader.Get("telegram", "system_language_code", "en-US");
     device_model_ = reader.Get("telegram", "device_model", "PC");
     system_version_ = reader.Get("telegram", "system_version", "Linux");
     application_version_ = reader.Get("telegram", "application_version", "1.0");

@@ -23,6 +23,7 @@
 class Settings {
 private:
     bool is_loaded_{false};
+    bool is_standard_folder_{false};
 
     int console_min_level_;
     int file_min_level_;
@@ -72,9 +73,9 @@ private:
     unsigned int peer_flood_time_;
 
 public:
-    explicit Settings(INIReader &reader);
+    explicit Settings(INIReader &reader, bool sf);
 
-    Settings(const Settings &) = delete;
+    Settings(const Settings &, bool sf) = delete;
 
     Settings &operator=(const Settings &) = delete;
 
@@ -157,6 +158,8 @@ public:
     unsigned int extra_wait_time() const { return extra_wait_time_; };
 
     unsigned int peer_flood_time() const { return peer_flood_time_; };
+
+    bool is_standard_folder() const { return is_standard_folder_; };
 };
 
 #endif //TG2SIP_SETTINGS_H

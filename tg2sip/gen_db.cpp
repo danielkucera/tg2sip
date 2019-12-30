@@ -231,8 +231,27 @@ private:
 
 int main() {
 
-    auto reader = INIReader("settings.ini");
-    Settings settings(reader);
+    bool standard_folder = false;
+
+    std::cout << "Loading config\n";
+
+    if (const char* env_p = std::getenv("TG2SIP_STANDARD_FOLDER")) {
+        std::cout << "Env.TG2SIP_STANDARD_FOLDER exist\n";
+        std::string tddir( env_p );
+         if (tddir.compare("YES") == 0) {
+             std::cout << "Using standard folder\n";
+             standard_folder = true;
+         }
+    }
+
+    std::string config("settings.ini");
+
+    if (standard_folder){
+        config = "/etc/tg2sip/settings.ini";
+    }
+
+    auto reader = INIReader(config);
+    Settings settings(reader, standard_folder);
 
     if (!settings.is_loaded()) {
         return 1;

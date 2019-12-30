@@ -1,0 +1,8 @@
+**
+!build
+!include
+!tg2sip
+!libtgvoip
+!build.sh
+!CMakeLists.txt
+!settings.ini

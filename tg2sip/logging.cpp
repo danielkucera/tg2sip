@@ -21,6 +21,14 @@
 
 void init_logging(Settings &settings) {
 
+    std::string tg2sip_log("tg2sip.log");
+    std::string tdlig_log("tdlib.log");
+
+    if (settings.is_standard_folder()){
+        tdlig_log = "/var/tg2sip/tdlib.log";
+        tg2sip_log = "/var/tg2sip/tg2sip.log";
+    }
+
     try {
         std::vector<spdlog::sink_ptr> sinks;
 
@@ -28,7 +36,7 @@ void init_logging(Settings &settings) {
         console_sink->set_level(static_cast<spdlog::level::level_enum>(settings.console_min_level()));
         sinks.push_back(std::move(console_sink));
 
-        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("tg2sip.log", 100 * 1024 * 1024, 1);
+        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(tg2sip_log, 100 * 1024 * 1024, 1);
         file_sink->set_level(static_cast<spdlog::level::level_enum>(settings.file_min_level()));
         sinks.push_back(std::move(file_sink));
 
@@ -55,7 +63,7 @@ void init_logging(Settings &settings) {
         std::cerr << ex.what() << std::endl;
     }
 
-    td::Log::set_file_path("tdlib.log");
+    td::Log::set_file_path(tdlig_log);
     td::Log::set_verbosity_level(settings.tdlib_log_level());
 
     spdlog::get("core")->set_level(static_cast<spdlog::level::level_enum>(settings.log_level()));

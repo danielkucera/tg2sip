@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  tg2sip-gateway:
+      image: hectorvent/tg2sip-gateway
+      restart: always
+      volumes:
+        - ./tg2sip/data:/var/tg2sip
+        - ./tg2sip/etc:/etc/tg2sip
+      
+# volumes: 
+#   tg2sip_data:
