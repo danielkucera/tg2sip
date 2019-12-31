@@ -20,7 +20,7 @@ Your SIP PBX should be comaptible with `L16@48000` or `OPUS@48000` voice codec.
 2. `\+[\d]+` for calls by phone number
 3. `[\d]+` for calls by telegram ID. Only known IDs allowed by telegram API.
 
-All `Telegram -> SIP` calls will be redirected to `callback_uri` SIP-URI that can be set in from `settings.ini` file. 
+All `Telegram -> SIP` calls will be redirected to `callback_uri` SIP-URI that can be set in from `settings.ini` file.
 Extra information about Telegram account caller will be added into SIP headers:
 
 * `X-TG-Context`: Special header for debug purpose
@@ -63,7 +63,7 @@ cp settings.ini /etc/tg2sip/
 cp tg2sip.service /etc/systemd/system
 systemctl daemon-reload
 
-# create Telegram database and fill the requested information
+# create Telegram Tdlib db and fill the requested information
 sudo TG2SIP_STANDARD_FOLDER=YES gen_db
 
 # start the tg2sip gateway and enjoy it.
@@ -74,18 +74,22 @@ systemctl start tg2sip.service
 
 ```bash
 cd docker
-cp ../settings.ini tg2sip/etc
-docker run --rm -it -v `pwd`/tg2sip/etc:/etc/tg2sip/ -v `pwd`/tg2sip/data:/var/tg2sip/ -e TG2SIP_STANDARD_FOLDER=YES hectorvent/tg2sip-gateway gen_db
-
+cp ../settings.ini etc
 # Edit settings file
+nano etc/settings.ini
+
+# Generate Telegram db
+docker run --rm -it -v `pwd`/etc:/etc/tg2sip/ -v `pwd`/data:/var/tg2sip/  hectorvent/tg2sip-gateway gen_db
+
+# start docker services
 docker-compose up -d
 ```
 
 ## Todo:
 
-- Update to new version of `Tdlib`
-- Integration example using `Asterisk`, `FreeSwitch` and `Kamailio`.
-- A better db inicialization process. Is posible to create a API.
+- Upgrade `Tdlib` to new version.
+- Integration examples with `Asterisk`, `FreeSwitch` and `Kamailio`.
+- A better Tdlib db initialization process. It is possible to create an API.
 
 ## Donate
 

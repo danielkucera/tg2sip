@@ -33,12 +33,6 @@ add_executable(tg2sip
         tg2sip/gateway.h
         )
 
-add_custom_command(
-        TARGET tg2sip PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/settings.ini
-        $<TARGET_FILE_DIR:tg2sip>)
-
 target_include_directories(tg2sip PRIVATE
         ${PJSIP_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}

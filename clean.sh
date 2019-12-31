@@ -3,9 +3,9 @@
 
 rm -rf CMakeFiles/
 rm -rf libtgvoip/CMakeFiles/
-rm -rf libtgvoip/cmake_install.cmake 
+rm -rf libtgvoip/cmake_install.cmake
 rm -rf libtgvoip/CMakeFiles/
-rm -rf libtgvoip/cmake_install.cmake 
+rm -rf libtgvoip/cmake_install.cmake
 rm -rf libtgvoip/CMakeFiles/
 rm -rf animations/
 rm -rf music/ photos/ secret stickers/ secret_thumbnails/
@@ -20,3 +20,4 @@ rm -rf CMakeCache.txt
 rm -rf cmake_install.cmake
 rm -rf libtgvoip/Makefile
 rm -rf libtgvoip/liblibtgvoip.a
+rm -rf Makefile
