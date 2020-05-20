@@ -32,7 +32,7 @@ RUN source /opt/rh/devtoolset-7/enable \
     && cd pjproject \
     && git reset --hard 2.9 \
     && cp /config_site.h pjlib/include/pj \
-    && ./configure --disable-sound CFLAGS="-O3 -DNDEBUG" \
+    && ./configure --disable-sound --prefix=/usr --libdir=/usr/lib64 CFLAGS="-O3 -DNDEBUG" \
     && make dep && make && make install \
     && cd / \
     && rm -rf pjproject
