@@ -1,6 +1,10 @@
-# TG2SIP Gateway
+# Tg2SIP Gateway
 
-TG2SIP is a `Telegram <-> SIP` voice gateway. It can be used to forward incoming telegram calls to your SIP PBX or vice versa.
+[![GitHub version](https://badge.fury.io/gh/hectorvent%2Ftg2sip.svg)](https://badge.fury.io/gh/hectorvent%2Ftg2sip)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/hectorvent/tg2sip-gateway?style=flat-square)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/hectorvent/tg2sip-gateway?style=flat-square)
+
+Tg2SIP is a `Telegram <-> SIP` voice gateway. It can be used to forward incoming telegram calls to your SIP PBX or vice versa.
 
 ## Requirements
 
@@ -44,7 +48,7 @@ cd tg2sip
 
 # Running on:
 
-## Running on debian
+## Debian 10
 
 ```bash
 # Install dependencies.
@@ -70,7 +74,9 @@ sudo TG2SIP_STANDARD_FOLDER=YES gen_db
 systemctl start tg2sip.service
 ```
 
-## Running on docker
+## Docker
+
+> Docker Tg2SIP image is based on Debian 10
 
 ```bash
 cd docker
