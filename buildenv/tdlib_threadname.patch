@@ -1,0 +1,12 @@
+diff --git a/tdutils/td/utils/port/detail/ThreadStl.h b/tdutils/td/utils/port/detail/ThreadStl.h
+index ef6ff475..c0e18ee4 100644
+--- a/tdutils/td/utils/port/detail/ThreadStl.h
++++ b/tdutils/td/utils/port/detail/ThreadStl.h
+@@ -41,6 +41,7 @@ class ThreadStl {
+       invoke_tuple(std::move(args));
+       clear_thread_locals();
+     });
++    pthread_setname_np(thread_.native_handle(), "tdlib");
+   }
+ 
+   void join() {

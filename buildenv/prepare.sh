@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 DOCKER_IMAGE=hectorvent/tg2sip-builder
 
 for DOCKER_TAG in bionic focal buster centos7

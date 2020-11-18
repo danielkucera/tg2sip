@@ -1,0 +1,31 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Native Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [bionic, centos7]
+    container: hectorvent/tg2sip-builder:${{ matrix.tag }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+        [ -d "/opt/rh" ] && source /opt/rh/devtoolset-7/enable
+        mkdir build && cd build
+        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake --build . -j $(grep -c ^processor /proc/cpuinfo);
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: tg2sip_${{ matrix.tag }}
+        path: |
+          build/tg2sip
+          build/gen_db
+          build/settings.ini
