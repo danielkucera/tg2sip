@@ -16,11 +16,8 @@ jobs:
 
     - name: Build
       run: |
-        [ -d "/opt/rh" ] && source /opt/rh/devtoolset-7/enable
-        mkdir build && cd build
-        export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        cmake --build . -j $(grep -c ^processor /proc/cpuinfo);
+        cmake -DCMAKE_BUILD_TYPE=Release .
+        cmake --build .
 
     - uses: actions/upload-artifact@v2
       with:
@@ -28,4 +25,4 @@ jobs:
         path: |
           build/tg2sip
           build/gen_db
-          build/settings.ini
+          settings.ini
