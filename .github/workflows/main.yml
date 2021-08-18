@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [bionic, centos7]
+        tag: [buster-tdlib1.6.0]
     container: hectorvent/tg2sip-builder:${{ matrix.tag }}
 
     steps:
