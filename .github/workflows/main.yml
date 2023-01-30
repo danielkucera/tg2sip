@@ -1,28 +1,31 @@
-name: CI
+name: Docker
 
-on: [push, pull_request]
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ "master" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+
   build:
-    name: Native Build
+
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        tag: [buster-tdlib1.6.0]
-    container: hectorvent/tg2sip-builder:${{ matrix.tag }}
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Build
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Release .
-        cmake --build .
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: tg2sip_${{ matrix.tag }}
-        path: |
-          build/tg2sip
-          build/gen_db
-          settings.ini
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
